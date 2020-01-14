@@ -48,12 +48,12 @@ for config in summary.keys():
 
 
     data_points = []
-    data_points += davgs
     data_points += p1
     data_points += p2
 
-    df = pd.DataFrame({"Avg. Reception (%)" : davgs,'Reception of 1st Frame (%)':p1, 'Reception of 2nd Frame (%)': p2}, index=dnames)
-    plt = df.plot.bar(yticks=(spacing), rot=0) #, legend=False , title = title,
+    # "Avg. Reception (%)" : davgs,
+    df = pd.DataFrame({'Reception of 1st Frame (%)':p1, 'Reception of 2nd Frame (%)': p2}, index=dnames)
+    plt = df.plot.bar(yticks=(spacing),title = title, rot=0) #, legend=False ,
     plt.legend(loc='lower right')
     # print(str(plt))
     for idx, bar in enumerate(plt.patches):
