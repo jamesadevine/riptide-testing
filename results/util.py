@@ -29,6 +29,8 @@ def extract_test_results(configuration_number, test_number, output_key = "", ext
             packets_seen = 0
             raw = {}
             processed = {}
+            p1 = 0
+            p2 = 0
 
             for l in lines:
                 l = l.strip("\n")
@@ -36,19 +38,26 @@ def extract_test_results(configuration_number, test_number, output_key = "", ext
 
                 if len(l) == 1:
                     continue
-                raw[l[0]] = [l[1], l[2]]
+
+                if device_name == "transmitter":
+                    raw[l[0]] = [l[1], l[2]]
+                    p1 += int(l[1])
+                    p2 += int(l[2])
+                else:
+                    #some dofus got the packing the wrong way round for observers...
+                    raw[l[0]] = [l[2], l[1]]
+                    p1 += int(l[2])
+                    p2 += int(l[1])
+
                 processed[l[0]] = int(l[1]) + int(l[2]) #
-                packets_seen += int(l[1])
-                packets_seen += int(l[2])
 
             if device_name not in summary[config_key].keys():
-                summary[config_key][device_name] = {}
+                summary[config_key][device_name] = {test_key:{}}
 
             if extract_raw:
                 summary[config_key][device_name]["processed"] = processed
                 summary[config_key][device_name]["raw"] = raw
 
-            if device_name == "transmitter":
-                summary[config_key][device_name][test_key] = float(packets_seen) / 1000.0 * 100.0
-            else:
-                summary[config_key][device_name][test_key] = float(packets_seen) / 2000.0 * 100.0
+            summary[config_key][device_name][test_key]["p1"] = float(p1) / 1000.0 * 100.0
+            summary[config_key][device_name][test_key]["p2"] = float(p2) / 1000.0 * 100.0
+            summary[config_key][device_name][test_key]["avg"] = ((float(p2) + float(p1))  / 2000.0) * 100.0
