@@ -28,6 +28,7 @@ def extract_test_results(configuration_number, test_number, output_key = "", ext
 
             packets_seen = 0
             raw = {}
+            processed = {}
 
             for l in lines:
                 l = l.strip("\n")
@@ -35,15 +36,16 @@ def extract_test_results(configuration_number, test_number, output_key = "", ext
 
                 if len(l) == 1:
                     continue
-                raw[l[0]] = int(l[1]) + int(l[2]) #[l[1], l[2]]
+                raw[l[0]] = [l[1], l[2]]
+                processed[l[0]] = int(l[1]) + int(l[2]) #
                 packets_seen += int(l[1])
                 packets_seen += int(l[2])
-
 
             if device_name not in summary[config_key].keys():
                 summary[config_key][device_name] = {}
 
             if extract_raw:
+                summary[config_key][device_name]["processed"] = processed
                 summary[config_key][device_name]["raw"] = raw
 
             if device_name == "transmitter":

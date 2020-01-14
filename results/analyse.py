@@ -42,7 +42,13 @@ for config in summary.keys():
         title = title_map[config]
 
     df = pd.DataFrame({'Device':dnames, 'Reliability': davgs})
-    fig = df.plot.bar(x='Device', y='Reliability', yticks=(spacing), title = title, rot=0).get_figure()
+    plt = df.plot.bar(x='Device', y='Reliability', yticks=(spacing), title = title, rot=0, legend=False)
+    # print(str(plt))
+    for idx, bar in enumerate(plt.patches):
+        h = bar.get_height()
+        plt.text(bar.get_x() + bar.get_width()/2., 1.0*h, '%.2f' % float(davgs[idx]), ha='center', va='bottom')
+
+    fig = plt.get_figure()
     fig.savefig(config)
 
     # exit()
