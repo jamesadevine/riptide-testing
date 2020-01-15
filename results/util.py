@@ -52,7 +52,10 @@ def extract_test_results(configuration_number, test_number, output_key = "", ext
                 processed[l[0]] = int(l[1]) + int(l[2]) #
 
             if device_name not in summary[config_key].keys():
-                summary[config_key][device_name] = {test_key:{}}
+                summary[config_key][device_name] = {}
+
+            if test_key not in summary[config_key][device_name].keys():
+                summary[config_key][device_name][test_key] = {}
 
             if extract_raw:
                 summary[config_key][device_name]["processed"] = processed
