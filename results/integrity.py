@@ -14,6 +14,8 @@ def integrity_check_files_in_folder(configuration_number, test_number):
             lines = f.readlines()
             if len(lines) != 1005:
                 print("Integrity check failed for %s" % (path))
+            else:
+                print("Integrity check complete for %s" % (path))
 
 if len(sys.argv) == 1:
     print("checking all expected configurations and test folders")

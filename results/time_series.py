@@ -1,6 +1,6 @@
 import glob, sys
 import pandas as pd
-from util import extract_test_results, summary, directory_prefix
+from util import extract_test_results, recursive_extract, summary, directory_prefix
 
 cfg = 0
 if len(sys.argv) == 2:
@@ -11,10 +11,16 @@ else:
 
 labels = []
 
-for i in range(1,8):
-    print(cfg)
-    extract_test_results(cfg, i)
-    print(summary)
+# for i in range(1,8):
+#     print(cfg)
+#     extract_test_results(cfg, i)
+#     print(summary)
+
+directory_path = directory_prefix + str(sys.argv[1])
+
+res = recursive_extract(directory_path)
+
+print (res)
 
 output_p1 = {}
 output_p2 = {}

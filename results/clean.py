@@ -5,12 +5,12 @@ directory_prefix = "./configuration-"
 def clean_files_in_folder(configuration_number, test_number):
     directory_path = directory_prefix + str(configuration_number) + "/test" + str(test_number)
 
-    to_remove = glob.glob(directory_path + "/*-clean.txt")
+    to_remove = glob.glob(directory_path + "/**/*-clean.txt")
 
     for r in to_remove:
         os.remove(r)
 
-    paths = glob.glob(directory_path + "/*.txt")
+    paths = glob.glob(directory_path + "/**/*.txt")
 
     if paths == []:
         print("No paths to clean in %s. Does the path exist?" % directory_path)
