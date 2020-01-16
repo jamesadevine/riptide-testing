@@ -3,7 +3,8 @@ import glob, sys, os
 summary = {}
 directory_prefix = "./configuration-"
 
-def extract_data(path):
+def extract_data(path, extract_raw = False):
+    device_name = path.split("/")[-1].replace("-clean.txt","")
     with open(path,"r+") as f:
         lines = f.readlines()
 
@@ -55,7 +56,9 @@ def combine_data_dicts(dicts):
                 combined[k] = d[k]
             else:
                 for k2 in d[k]:
-                    combined[k][k2] += d[k][k2] / 2.0
+                    print(combined[k][k2])
+                    print(d[k][k2])
+                    combined[k][k2] = (combined[k][k2] + d[k][k2]) / 2.0
 
     return combined
 
@@ -83,7 +86,7 @@ def recursive_extract(path):
 
     return combine_data_dicts([out, new])
 
-def extract_basic(config_key, test_key, paths):
+def extract_basic(config_key, test_key, paths, extract_raw):
     for path in paths:
 
         if config_key not in summary.keys():
@@ -97,16 +100,17 @@ def extract_basic(config_key, test_key, paths):
         if test_key not in summary[config_key][device_name].keys():
             summary[config_key][device_name][test_key] = {}
 
-        out = extract_data(path)
+        out = extract_data(path, extract_raw)
 
-        summary[config_key][device_name]["processed"] = out["processed"]
-        summary[config_key][device_name]["raw"] = out["raw"]
+        if extract_raw:
+            summary[config_key][device_name]["processed"] = out["processed"]
+            summary[config_key][device_name]["raw"] = out["raw"]
         summary[config_key][device_name][test_key]["p1"] = out["p1"]
         summary[config_key][device_name][test_key]["p2"] = out["p2"]
         summary[config_key][device_name][test_key]["avg"] = out["avg"]
 
 
-def extract_test_results(configuration_number, test_number, output_key = ""):
+def extract_test_results(configuration_number, test_number, output_key = "", extract_raw=False):
     directory_path = directory_prefix + str(configuration_number) + "/test" + str(test_number)
     paths = glob.glob(directory_path + "/*-clean.txt")
 
@@ -117,4 +121,20 @@ def extract_test_results(configuration_number, test_number, output_key = ""):
 
     test_key = "test"+str(test_number)
 
-    extract_basic(config_key, test_key, paths)
+    if paths == []:
+        results = recursive_extract(directory_path)
+
+        if results == {}:
+            return
+
+        if config_key not in summary.keys():
+            summary[config_key] = {}
+
+        for device_name in results:
+            if device_name not in summary[config_key].keys():
+                summary[config_key][device_name] = {}
+
+            summary[config_key][device_name][test_key] = results[device_name]
+    else:
+
+        extract_basic(config_key, test_key, paths, extract_raw)

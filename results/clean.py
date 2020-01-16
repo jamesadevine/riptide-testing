@@ -18,7 +18,7 @@ def clean_files_in_folder(configuration_number, test_number):
     for path in paths:
         with open(path,"r+") as f:
             file_name = path.split("/")[-1].replace(".txt","")
-
+            dir_path = '/'.join(path.split("/")[:-1])
             lines = f.readlines()
 
             outlines = []
@@ -27,7 +27,7 @@ def clean_files_in_folder(configuration_number, test_number):
                     continue
                 outlines += [l]
 
-            with open(directory_path + "/" + file_name + "-clean.txt","w") as out:
+            with open(dir_path + "/" + file_name + "-clean.txt","w") as out:
                 out.writelines(outlines)
 
 if len(sys.argv) == 1:
