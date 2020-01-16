@@ -2,25 +2,6 @@ import glob, sys
 import pandas as pd
 from util import extract_test_results, recursive_extract, summary, directory_prefix
 
-cfg = 0
-if len(sys.argv) == 2:
-    cfg = sys.argv[1]
-else:
-    print("No configuration specified.")
-    exit(-1)
-
-labels = []
-
-for i in range(1,8):
-    # print(cfg)
-    extract_test_results(cfg, i)
-    # print(summary)
-
-print (summary)
-
-output_p1 = {}
-output_p2 = {}
-
 # for configuration 11
 # order_map = {
 #     "test1":0,
@@ -42,6 +23,27 @@ output_p2 = {}
 # }
 
 # for configuration 12
+# order_map = {
+#     "test1":0,
+#     "test2":1,
+#     "test3":2,
+#     "test4":3,
+#     "test5":4,
+#     "test6":5,
+#     "test7":6,
+# }
+
+# label_map = {
+#     "test1":"%.2f cm" % (1.*5.2),
+#     "test2":"%.2f cm" % (2.*5.2),
+#     "test3":"%.2f cm" % (3.*5.2),
+#     "test4":"%.2f cm" % (4.*5.2),
+#     "test5":"%.2f cm" % (5.*5.2),
+#     "test6":"%.2f cm" % (6.*5.2),
+#     "test7":"%.2f cm" % (7.*5.2),
+# }
+
+#for configuration 13
 order_map = {
     "test1":0,
     "test2":1,
@@ -50,17 +52,44 @@ order_map = {
     "test5":4,
     "test6":5,
     "test7":6,
+    "test8":7,
+    "test9":8,
+    "test10":9,
+    "test11":10,
 }
 
 label_map = {
-    "test1":"%.2f cm" % (1.*5.2),
-    "test2":"%.2f cm" % (2.*5.2),
-    "test3":"%.2f cm" % (3.*5.2),
-    "test4":"%.2f cm" % (4.*5.2),
-    "test5":"%.2f cm" % (5.*5.2),
-    "test6":"%.2f cm" % (6.*5.2),
-    "test7":"%.2f cm" % (7.*5.2),
+    "test1":"%.2f\ncm" % (1.*8.),
+    "test2":"%.2f\ncm" % (2.*8.),
+    "test3":"%.2f\ncm" % (3.*8.),
+    "test4":"%.2f\ncm" % (4.*8.),
+    "test5":"%.2f\ncm" % (5.*8.),
+    "test6":"%.2f\ncm" % (6.*8.),
+    "test7":"%.2f\ncm" % (7.*8.),
+    "test8":"%.2f\ncm" % (8.*8.),
+    "test9":"%.2f\ncm" % (9.*8.),
+    "test10":"%.2f\ncm" % (10.*8.),
+    "test11":"%.2f\ncm" % (11.*8.),
 }
+
+cfg = 0
+if len(sys.argv) == 2:
+    cfg = sys.argv[1]
+else:
+    print("No configuration specified.")
+    exit(-1)
+
+labels = []
+
+for i in range(1,len(order_map.keys())):
+    # print(cfg)
+    extract_test_results(cfg, i)
+    # print(summary)
+
+print (summary)
+
+output_p1 = {}
+output_p2 = {}
 
 print(summary)
 
