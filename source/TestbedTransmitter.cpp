@@ -3,7 +3,7 @@
 
 #if CURRENT_TEST_CONFIG == TEST_CONFIG_TESTBED_TRANSMITTER
 
-#pragma message "COMPILING REPEATER"
+#pragma message "COMPILING TRANSMITTER"
 
 #include "MicroBit.h"
 
