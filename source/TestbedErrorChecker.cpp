@@ -1,9 +1,9 @@
 #include "TestConfig.h"
 #include "GPIODebug.h"
 
-#if CURRENT_TEST_CONFIG == TEST_CONFIG_TESTBED_VISUALISER
+#if CURRENT_TEST_CONFIG == TEST_CONFIG_TESTBED_ERROR_CHECKER
 
-#pragma message "COMPILING VISUALISER"
+#pragma message "COMPILING ERROR CHECKER"
 
 #include "MicroBit.h"
 
@@ -28,7 +28,7 @@ PeridoFrameBuffer expected;
 
 void process_packet(PeridoFrameBuffer* p, bool crc_ok, int rssi)
 {
-    if (!p || !crc_ok)
+    if (!p || crc_ok)
         return;
 
     rssi = 127 - rssi;
@@ -43,6 +43,16 @@ void process_packet(PeridoFrameBuffer* p, bool crc_ok, int rssi)
         p2_counter++;
         rssi_avg += rssi;
     }
+
+    expected.ttl = p->ttl;
+    uint8_t* buffPtr = (uint8_t*)p;
+    uint8_t* expBuffPtr = (uint8_t*)&expected;
+
+    uBit.serial.printf("-----------%d------------\r\n", p->ttl);
+
+    for (int i = 0; i < MICROBIT_PERIDO_HEADER_SIZE + 4; i++)
+        if (buffPtr[i] != expBuffPtr[i])
+            uBit.serial.printf("idx: %d exp: %d act: %d\r\n", i, expBuffPtr[i], buffPtr[i]);
 }
 
 MicroBitImage bar_chart(5,5);
@@ -77,7 +87,7 @@ void render_counters()
 {
     int rssi_counter = p2_counter;
 
-    uBit.serial.printf("raw: %d count: %d avg: %d normalised: %d\r\n", rssi_avg, rssi_counter, rssi_avg / rssi_counter, normalise_rssi(rssi_avg / rssi_counter));
+    // uBit.serial.printf("raw: %d count: %d avg: %d normalised: %d\r\n", rssi_avg, rssi_counter, rssi_avg / rssi_counter, normalise_rssi(rssi_avg / rssi_counter));
 
     if (p1_counter > 10)
         p1_counter = 10;
@@ -87,8 +97,7 @@ void render_counters()
 
     bar_chart.clear();
 
-    // draw_chart(normalise_rssi(rssi_avg / rssi_counter), 0, 4, 2);
-    draw_chart(p1_counter, 0, 4, 2);
+    draw_chart(normalise_rssi(rssi_avg / rssi_counter), 0, 4, 2);
     draw_chart(p2_counter, 3, 4, 5);
 
     uBit.display.print(bar_chart);
