@@ -44,6 +44,55 @@ from util import extract_test_results, recursive_extract, summary, directory_pre
 # }
 
 #for configuration 13
+# order_map = {
+#     "test1":0,
+#     "test2":1,
+#     "test3":2,
+#     "test4":3,
+#     "test5":4,
+#     "test6":5,
+#     "test7":6,
+#     "test8":7,
+#     "test9":8,
+#     "test10":9,
+#     "test11":10,
+# }
+
+# label_map = {
+#     "test1":"%.2f\ncm" % (1.*8.),
+#     "test2":"%.2f\ncm" % (2.*8.),
+#     "test3":"%.2f\ncm" % (3.*8.),
+#     "test4":"%.2f\ncm" % (4.*8.),
+#     "test5":"%.2f\ncm" % (5.*8.),
+#     "test6":"%.2f\ncm" % (6.*8.),
+#     "test7":"%.2f\ncm" % (7.*8.),
+#     "test8":"%.2f\ncm" % (8.*8.),
+#     "test9":"%.2f\ncm" % (9.*8.),
+#     "test10":"%.2f\ncm" % (10.*8.),
+#     "test11":"%.2f\ncm" % (11.*8.),
+# }
+
+# configuration 14
+# order_map = {
+#     "test1":0,
+#     "test2":1,
+#     "test3":2,
+#     "test4":3,
+#     "test5":4,
+#     "test6":5,
+#     "test7":6,
+# }
+
+# label_map = {
+#     "test1":"LR: .1\nRR: .1\n",
+#     "test2":"LR: .3\nRR: .1\n",
+#     "test3":"LR: .3\nRR: .3\n",
+#     "test4":"LR: .3\nRR: .6\n",
+#     "test5":"LR: .6\nRR: .6\n",
+#     "test6":"LR: .9\nRR: .6\n",
+#     "test7":"LR: .9\nRR: .9\n",
+# }
+
 order_map = {
     "test1":0,
     "test2":1,
@@ -59,17 +108,17 @@ order_map = {
 }
 
 label_map = {
-    "test1":"%.2f\ncm" % (1.*8.),
-    "test2":"%.2f\ncm" % (2.*8.),
-    "test3":"%.2f\ncm" % (3.*8.),
-    "test4":"%.2f\ncm" % (4.*8.),
-    "test5":"%.2f\ncm" % (5.*8.),
-    "test6":"%.2f\ncm" % (6.*8.),
-    "test7":"%.2f\ncm" % (7.*8.),
-    "test8":"%.2f\ncm" % (8.*8.),
-    "test9":"%.2f\ncm" % (9.*8.),
-    "test10":"%.2f\ncm" % (10.*8.),
-    "test11":"%.2f\ncm" % (11.*8.),
+    "test1":"0\n",
+    "test2":"1\n",
+    "test3":"2\n",
+    "test4":"3\n",
+    "test5":"4\n",
+    "test6":"5\n",
+    "test7":"6\n",
+    "test8":"7\n",
+    "test9":"8\n",
+    "test10":"9\n",
+    "test11":"10\n",
 }
 
 cfg = 0

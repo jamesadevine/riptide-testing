@@ -20,7 +20,7 @@ extern volatile uint32_t packets_transmitted;
 extern volatile uint32_t packets_forwarded;
 extern volatile uint32_t crc_fail_count;
 
-void process_packet(PeridoFrameBuffer* p, bool crc_ok)
+void process_packet(PeridoFrameBuffer* p, bool crc_ok, int)
 {
     if (!p || !crc_ok)
         return;
@@ -104,10 +104,10 @@ int main()
         uBit.display.print('T');
         while (1)
         {
-            if (uBit.buttonA.isPressed())
+            if (uBit.buttonB.isPressed())
                 break;
 
-            if (uBit.buttonB.isPressed())
+            if (uBit.buttonA.isPressed())
                 transmit_results();
         }
 

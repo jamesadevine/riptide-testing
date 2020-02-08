@@ -2,7 +2,8 @@ import sys, glob, os
 
 directory_prefix = "./configuration-"
 
-expected_files_names = ["transmitter-observer.txt", "transmitter.txt", "bottom-left.txt", "top-left.txt", "bottom-right.txt","top-right.txt"]
+# expected_files_names = ["transmitter-observer.txt", "transmitter.txt", "bottom-left.txt", "top-left.txt", "bottom-right.txt","top-right.txt"]
+expected_files_names = ["observer.txt"]
 
 def integrity_check_files_in_folder(configuration_number, test_number):
     directory_path = directory_prefix + str(configuration_number) + "/test" + str(test_number)

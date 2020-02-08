@@ -20,7 +20,7 @@ extern volatile uint32_t packets_transmitted;
 extern volatile uint32_t packets_forwarded;
 extern volatile uint32_t crc_fail_count;
 
-void process_packet(PeridoFrameBuffer* p, bool crc_ok)
+void process_packet(PeridoFrameBuffer* p, bool crc_ok, int)
 {
     if (!p || !crc_ok)
         return;
