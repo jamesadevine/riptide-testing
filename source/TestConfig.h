@@ -8,7 +8,7 @@
 #define TEST_CONFIG_TESTBED_VISUALISER      9
 #define TEST_CONFIG_TESTBED_BEACON          10
 
-#define CURRENT_TEST_CONFIG         TEST_CONFIG_TESTBED_REPEATER
+#define CURRENT_TEST_CONFIG         TEST_CONFIG_TESTBED_COLLECTOR
 
 #define TEST_SOURCE_COUNT                   1
 #define TEST_PACKET_COUNT                   1000
@@ -19,7 +19,8 @@
 
 #define TESTBED_MAX_SEQUENCE                1000
 #define TESTBED_REPETITIONS_SEQUENCE        2
-#define TESTBED_MAX_PAYLOAD                 80
+#define TESTBED_MAX_PAYLOAD                 238
+#define TESTBED_RESULT_HEADER_SIZE          2
 
 #define PACKETS_PER_SECOND                  10
 

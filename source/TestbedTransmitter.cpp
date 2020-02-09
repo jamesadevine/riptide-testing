@@ -14,71 +14,54 @@ struct ReliabilityTestPacket
     uint32_t seq;
 }__attribute__((packed));
 
-uint8_t reliabilityResults[TESTBED_MAX_SEQUENCE][TESTBED_REPETITIONS_SEQUENCE] = { 0 };
+
+uint8_t reliabilityResults[TESTBED_MAX_SEQUENCE] = { 0 };
 extern volatile uint32_t packets_received;
 extern volatile uint32_t packets_transmitted;
 extern volatile uint32_t packets_forwarded;
 extern volatile uint32_t crc_fail_count;
 
-void process_packet(PeridoFrameBuffer* p, bool crc_ok, int)
-{
-    if (!p || !crc_ok)
-        return;
-
-    ReliabilityTestPacket* pkt = (ReliabilityTestPacket*)p->payload;
-    reliabilityResults[pkt->seq][p->ttl + 1] = 1;
-}
-
-extern void manual_poke(PeridoFrameBuffer*);
-
-PeridoFrameBuffer buf;
-
-
 void transmit_results()
 {
+    uBit.radio.disable();
+
+tx_results:
+    uint8_t iterator = TESTBED_RESULT_HEADER_SIZE;
+    uint16_t seq_counter = 0;
+
     uint8_t* data = (uint8_t*) malloc(255);
     memset(data, 0, 255);
     uint16_t* seq_start = (uint16_t *)data;
 
-    uint8_t iterator = 2;
-    uint16_t seq_counter = 0;
-
-    int verified = 0;
-
-    for (int i = 0; i < TESTBED_MAX_SEQUENCE; i++)
-    {
-        if (reliabilityResults[seq_counter][1] || reliabilityResults[seq_counter][0])
-            verified++;
-    }
-
-    uBit.serial.printf("VERIFIED COUNT: %d", verified);
-
-    uBit.radio.disable();
-
     while (seq_counter < TESTBED_MAX_SEQUENCE)
     {
-        uBit.serial.printf("seq %d\r\n", seq_counter);
         *seq_start = seq_counter;
-        iterator = 2;
-        while (iterator < TESTBED_MAX_PAYLOAD + 2 && seq_counter < TESTBED_MAX_SEQUENCE)
-        {
-            uint8_t byte = 0;
-            byte |= ((reliabilityResults[seq_counter][1] ? (0x1 << 1) : 0 ) | (reliabilityResults[seq_counter][0] ? (0x1 << 0) : 0));
-            byte |= ((reliabilityResults[seq_counter + 1][1] ? (0x1 << 3) : 0 ) | (reliabilityResults[seq_counter + 1][0] ? (0x1 << 2) : 0));
-            byte |= ((reliabilityResults[seq_counter + 2][1] ? (0x1 << 5) : 0 ) | (reliabilityResults[seq_counter + 2][0] ? (0x1 << 4) : 0));
-            byte |= ((reliabilityResults[seq_counter + 3][1] ? (0x1 << 7) : 0 ) | (reliabilityResults[seq_counter + 3][0] ? (0x1 << 6) : 0));
-            data[iterator++] = byte;
-            seq_counter += 4;
-        }
 
-        uBit.serial.printf("tx seq %d, %d %d\r\n", *seq_start, data[1], data[0]);
-        uBit.radio.sendTestResults(data, TESTBED_MAX_PAYLOAD + 2);
+        iterator = TESTBED_RESULT_HEADER_SIZE;
+        while (iterator < TESTBED_MAX_PAYLOAD + TESTBED_RESULT_HEADER_SIZE && seq_counter < TESTBED_MAX_SEQUENCE)
+            data[iterator++] = reliabilityResults[seq_counter++];
+
+        uBit.radio.sendTestResults(data, TESTBED_MAX_PAYLOAD + TESTBED_RESULT_HEADER_SIZE);
         wait_ms(1000);
     }
 
     free(data);
 
-    uBit.radio.enable();
+    while (1)
+    {
+        uBit.display.print('X');
+        while(!uBit.buttonA.isPressed());
+        goto tx_results;
+    }
+}
+
+void process_packet(TDMACATSuperFrame* p, bool crc_ok, int correction)
+{
+    if (!p || !crc_ok)
+        return;
+
+    ReliabilityTestPacket* pkt = (ReliabilityTestPacket*)p->payload;
+    reliabilityResults[pkt->seq] |= 1 << (p->ttl + correction);
 }
 
 int main()
@@ -87,17 +70,6 @@ int main()
     uBit.radio.setTestRole(Transmitter);
     uBit.radio.enable();
     test_gpio_init();
-
-    ReliabilityTestPacket* t = (ReliabilityTestPacket *)buf.payload;
-
-    buf.id = microbit_random(65535);
-    buf.length = 4 + MICROBIT_PERIDO_HEADER_SIZE - 1;
-    buf.app_id = 0;
-    buf.namespace_id = 0;
-    buf.ttl = MICROBIT_PERIDO_DEFAULT_TTL;
-    buf.initial_ttl = MICROBIT_PERIDO_DEFAULT_TTL;
-    buf.time_since_wake = 0;
-    buf.period = 0;
 
     while(1)
     {
@@ -115,8 +87,7 @@ int main()
         {
             uBit.display.print('.');
             wait_ms(10);
-            t->seq = i;
-            manual_poke(&buf);
+            while(uBit.radio.send((uint8_t*)&i, 4) != MICROBIT_OK);
             uBit.display.print(' ');
             wait_ms(10);
         }
