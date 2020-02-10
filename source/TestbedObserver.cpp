@@ -56,21 +56,63 @@ tx_results:
 
 void process_packet(TDMACATSuperFrame* p, bool crc_ok, int correction)
 {
-    if (!p || !crc_ok)
+    if (!p || !crc_ok || p->flags & TMDMA_CAT_FRAME_FLAGS_ADVERT || p->length == (TDMA_CAT_HEADER_SIZE - 1))
         return;
 
     ReliabilityTestPacket* pkt = (ReliabilityTestPacket*)p->payload;
     reliabilityResults[pkt->seq] |= 1 << (p->ttl + correction);
 }
 
+#include "TDMACAT.h"
+void dump_tdma_table(int skip_blank)
+{
+    uBit.serial.printf("|SLOT\t|DID\t|EXP\t|DIST\t|FLGS\t|\r\n");
+    uBit.serial.printf("|-------|-------|-------|-------|-------|\r\n");
+
+    for (int i = 0; i < TDMA_CAT_TABLE_SIZE; i++)
+    {
+        TDMACATSlot t = tdma_get_slot(i);
+
+        if (skip_blank && t.flags & TDMA_SLOT_FLAGS_UNINITIALISED)
+            continue;
+
+        uBit.serial.printf("|%d\t|%d\t|%d\t|%d\t|%d\t|\r\n", i, (int)t.device_identifier, t.expiration, t.distance, t.flags);
+    }
+    uBit.serial.printf("\r\n");
+}
+
+
 void clear_data(MicroBitEvent)
 {
     memset(reliabilityResults, 0, TESTBED_MAX_SEQUENCE);
 }
 
+extern uint32_t serial_number;
+
+#define PREALLOC_SLOT_SIZE 12
+uint8_t slots[PREALLOC_SLOT_SIZE] = { 8, 12, 15, 20, 23, 27, 30, 35, 38, 40, 44, 48};
+
+void pre_allocate_tdma()
+{
+    TDMACATSlot adv;
+
+    adv.device_identifier = 0;
+    adv.slot_identifier = TDMA_CAT_ADVERTISEMENT_SLOT;
+    adv.expiration = TDMA_CAT_NEVER_EXPIRE;
+    adv.distance = 0;
+    adv.flags = 0;
+
+    for (int i = 0 ; i < 12; i++)
+    {
+        adv.slot_identifier = slots[i];
+        tdma_set_slot(adv, false);
+    }
+}
+
 int main()
 {
     uBit.init();
+    pre_allocate_tdma();
     uBit.radio.setTestRole(Observer);
     memset(reliabilityResults, 0, TESTBED_MAX_SEQUENCE);
     uBit.radio.enable();
@@ -79,10 +121,14 @@ int main()
 
     test_gpio_init();
 
+    uBit.display.print((int)serial_number);
+    uBit.sleep(500);
+
     while(1)
     {
         uBit.display.print('O');
         uBit.sleep(500);
+        // dump_tdma_table(1);
         // uBit.serial.printf("tx %d fwd %d rx %d crce: %d ", packets_transmitted, packets_forwarded, packets_received,crc_fail_count);
         uBit.display.print(' ');
         uBit.sleep(500);

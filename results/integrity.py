@@ -3,7 +3,8 @@ import sys, glob, os
 directory_prefix = "./configuration-"
 
 # expected_files_names = ["transmitter-observer.txt", "transmitter.txt", "bottom-left.txt", "top-left.txt", "bottom-right.txt","top-right.txt"]
-expected_files_names = ["observer.txt"]
+# expected_files_names = ["observer.txt"]
+expected_files_names = ["transmitter.txt", "observer[1].txt"]
 
 def integrity_check_files_in_folder(configuration_number, test_number):
     directory_path = directory_prefix + str(configuration_number) + "/test" + str(test_number)
@@ -17,7 +18,8 @@ def integrity_check_files_in_folder(configuration_number, test_number):
     for path in paths:
         with open(path,"r+") as f:
             lines = f.readlines()
-            if len(lines) != 1005:
+            if len(lines) != 1001:
+                print(len(lines))
                 print("Integrity check failed for %s" % (path))
                 exit(-1)
             else:

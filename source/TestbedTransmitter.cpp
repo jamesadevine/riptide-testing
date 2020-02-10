@@ -57,19 +57,45 @@ tx_results:
 
 void process_packet(TDMACATSuperFrame* p, bool crc_ok, int correction)
 {
-    if (!p || !crc_ok)
+    if (!p || !crc_ok || p->flags & TMDMA_CAT_FRAME_FLAGS_ADVERT || p->length == (TDMA_CAT_HEADER_SIZE - 1))
         return;
 
     ReliabilityTestPacket* pkt = (ReliabilityTestPacket*)p->payload;
     reliabilityResults[pkt->seq] |= 1 << (p->ttl + correction);
 }
 
+extern uint32_t serial_number;
+
+#include "TDMACAT.h"
+#define PREALLOC_SLOT_SIZE 12
+uint8_t slots[PREALLOC_SLOT_SIZE] = { 8, 12, 15, 20, 23, 27, 30, 35, 38, 40, 44, 48};
+
+void pre_allocate_tdma()
+{
+    TDMACATSlot adv;
+
+    adv.device_identifier = 0;
+    adv.slot_identifier = TDMA_CAT_ADVERTISEMENT_SLOT;
+    adv.expiration = TDMA_CAT_NEVER_EXPIRE;
+    adv.distance = 0;
+    adv.flags = TDMA_SLOT_FLAGS_OWNER;
+
+    for (int i = 0 ; i < 12; i++)
+    {
+        adv.slot_identifier = slots[i];
+        tdma_set_slot(adv, false);
+    }
+}
 int main()
 {
     uBit.init();
+    pre_allocate_tdma();
     uBit.radio.setTestRole(Transmitter);
     uBit.radio.enable();
     test_gpio_init();
+
+    uBit.display.print((int)serial_number);
+    uBit.sleep(500);
 
     while(1)
     {
