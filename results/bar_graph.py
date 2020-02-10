@@ -93,33 +93,100 @@ from util import extract_test_results, recursive_extract, summary, directory_pre
 #     "test7":"LR: .9\nRR: .9\n",
 # }
 
-#configuration 15
-order_map = {
-    "test1":0,
-    "test2":1,
-    "test3":2,
-    "test4":3,
-    "test5":4,
-    "test6":5,
-    "test7":6,
-    "test8":7,
-    "test9":8,
-    "test10":9,
-    "test11":10,
-}
-
-label_map = {
-    "test1":"0\n",
-    "test2":"1\n",
-    "test3":"2\n",
-    "test4":"3\n",
-    "test5":"4\n",
-    "test6":"5\n",
-    "test7":"6\n",
-    "test8":"7\n",
-    "test9":"8\n",
-    "test10":"9\n",
-    "test11":"10\n",
+mapping = {
+    "16" : {
+        "order_map":{
+            "test1":0,
+            "test2":1,
+            "test3":2,
+            "test4":3,
+            "test5":4,
+            "test6":5,
+            "test7":6,
+            "test8":7,
+            "test9":8,
+            "test10":9,
+            "test11":10,
+        },
+        "label_map" : {
+            "test1":"0 Hops\n",
+            "test2":"0-1 Hops\n",
+            "test3":"1-2 Hops\n",
+            "test4":"2 Hops\n",
+        },
+        "device_name_map" : {
+            "transmitter":"Transmitter",
+            "observer[1]":"Observer 1",
+            "observer[2]":"Observer 2",
+            "observer[3]":"Observer 3",
+            "observer[5]":"Observer 4",
+            "observer[6]":"Observer 5",
+            "observer[7]":"Observer 6",
+            "observer[8]":"Observer 7",
+        },
+        "color_map":["#1f77b4","#ff7f0e",'#2ca02c', '#d62728', '#7f7f7f'],
+        'sort_list' : ["Transmitter", "Observer 1", "Observer 2", "Observer 3", "Observer 4"]
+    },
+    "17" : {
+        "order_map":{
+            "test1":0,
+            "test2":1,
+            "test3":2,
+            "test4":3,
+            "test5":4,
+            "test6":5,
+            "test7":6,
+            "test8":7,
+            "test9":8,
+            "test10":9,
+            "test11":10,
+        },
+        "label_map" : {
+            "test1":""
+        },
+        "device_name_map" : {
+            "transmitter":"Transmitter",
+            "observer[1]":"Observer 1",
+            "observer[2]":"Observer 2",
+            "observer[3]":"Observer 3",
+            "observer[5]":"Observer 4",
+            "observer[6]":"Observer 5",
+            "observer[7]":"Observer 6",
+            "observer[8]":"Observer 7",
+        },
+        "sort_list" : ["Transmitter", "Observer 5", "Observer 1", "Observer 2", "Observer 3", "Observer 6", "Observer 7", "Observer 4"],
+        "color_map": ["#1f77b4", '#9467bd',"#ff7f0e",'#2ca02c', '#d62728', '#8c564b', '#e377c2', '#7f7f7f']
+    },
+    "18" : {
+        "order_map":{
+            "test1":0,
+            "test2":1,
+            "test3":2,
+            "test4":3,
+            "test5":4,
+            "test6":5,
+            "test7":6,
+            "test8":7,
+            "test9":8,
+            "test10":9,
+            "test11":10,
+        },
+        "label_map" : {
+            "test1":""
+        },
+        "device_name_map" : {
+            "transmitter":"Transmitter",
+            "observer[1]":"Observer 1",
+            "observer[2]":"Observer 2",
+            "observer[3]":"Observer 3",
+            "observer[5]":"Observer 4",
+            "observer[6]":"Observer 5",
+            "observer[7]":"Observer 6",
+            "observer[8]":"Observer 7",
+        },
+        "color_map":["#1f77b4","#ff7f0e",'#2ca02c', '#d62728', '#7f7f7f'],
+        'sort_list' : ["Transmitter", "Observer 1", "Observer 2", "Observer 3", "Observer 4"]
+    }
 }
 
 cfg = 0
@@ -144,36 +211,46 @@ labels = []
 packet_count_data = {}
 reliability_data = {}
 
+current_map = mapping[str(cfg)]
+
 for config in summary.keys():
     for device in summary[config].keys():
+
+        d_name = device
+
+        if device in current_map["device_name_map"]:
+            d_name = current_map["device_name_map"][device]
+
         if len(labels) == 0:
             labels = [0] * len(summary[config][device].keys())
-        packet_count_data[device] = [0] * len(labels)
-        reliability_data[device] = [0] * len(labels)
+        packet_count_data[d_name] = [0] * len(labels)
+        reliability_data[d_name] = [0] * len(labels)
 
         for idx,test in enumerate(summary[config][device].keys()):
-            labels[order_map[test]] = test
-            packet_count_data[device][order_map[test]] = sum(summary[config][device][test]["counters"])
-            reliability_data[device][order_map[test]] = summary[config][device][test]["reliability"]
+            labels[current_map["order_map"][test]] = current_map["label_map"][test]
+            packet_count_data[d_name][current_map["order_map"][test]] = sum(summary[config][device][test]["counters"])
+            reliability_data[d_name][current_map["order_map"][test]] = summary[config][device][test]["reliability"]
 
 print (packet_count_data)
 print (reliability_data)
 
 title = "configuration-"+str(cfg)+"-bar-graph"
 
-data_frames = [{"alt_title":"packet-count","title":"Packet Count", "df": pd.DataFrame(packet_count_data, index=labels)}, {"alt_title":"reliability","title":"\% of sequence numbers seen", "df": pd.DataFrame(reliability_data, index=labels)}]
+data_frames = [{"alt_title":"packet-count","title":"Packet Count", "df": pd.DataFrame(packet_count_data, index=labels)}, {"alt_title":"reliability","title":"% of sequence numbers seen", "df": pd.DataFrame(reliability_data, index=labels)}]
 
 for df in data_frames:
-    t = title + "-" + df["alt_title"]
-    plt = df["df"].plot.bar(title = t, rot=0) #, legend=False , yticks=(spacing)
-    plt.legend(loc='lower right')
-    # print(str(plt))
-    # for idx, bar in enumerate(plt.patches):
-    #     h = bar.get_height()
-    #     if h < 13:
-    #         h = 14
-    #     plt.text(bar.get_x() + bar.get_width()/2., h - 13, '%.2f' % float(data_points[idx]), ha='center', va='bottom', rotation=90)
 
+    df["df"] = df["df"][current_map["sort_list"]]
+    t = title + "-" + df["alt_title"]
+
+    spacing = [i for i in range(0,105,5)]
+
+    if "color_map" in current_map.keys():
+        plt = df["df"].plot.bar(title = df["title"], rot=0, color=current_map["color_map"], yticks=(spacing)) #, legend=False , yticks=(spacing)
+    else:
+        plt = df["df"].plot.bar(title = df["title"], rot=0, yticks=(spacing)) #, legend=False , yticks=(spacing)
+
+    plt.legend(loc='lower right')
     fig = plt.get_figure()
     # fig.set_figheight(8)
     fig.savefig(t, dpi=100)
