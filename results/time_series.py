@@ -158,12 +158,13 @@ for config in summary.keys():
 
 title = "configuration-"+str(cfg)+"-timeseries"
 
-data_frames = [{"title":"p1", "df": pd.DataFrame(output_p1, index=labels)}, {"title":"p2", "df": pd.DataFrame(output_p2, index=labels)}]
+data_frames = [{"alt_title":"p1","title":"Packets seen from initial transmission (%)", "df": pd.DataFrame(output_p1, index=labels)}, {"alt_title":"p2","title":"Packets successfully received from repetition (%)", "df": pd.DataFrame(output_p2, index=labels)}]
 
 for df in data_frames:
-    t = title + "-" + df["title"]
-    plt = df["df"].plot.line(title = t, rot=0) #, legend=False , yticks=(spacing)
-    plt.legend(loc='lower right')
+    t = title + "-" + df["alt_title"]
+    plt = df["df"].plot.line(title = df["title"], rot=0) #, legend=False , yticks=(spacing)
+    plt.set_xlabel("Introduced delay (cycles)")
+    plt.legend(loc='upper right')
     # print(str(plt))
     # for idx, bar in enumerate(plt.patches):
     #     h = bar.get_height()
@@ -173,4 +174,4 @@ for df in data_frames:
 
     fig = plt.get_figure()
     # fig.set_figheight(8)
-    fig.savefig(t, dpi=100)
+    fig.savefig(t, dpi=300, bbox_inches = "tight")

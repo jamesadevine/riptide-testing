@@ -253,4 +253,4 @@ for df in data_frames:
     plt.legend(loc='lower right')
     fig = plt.get_figure()
     # fig.set_figheight(8)
-    fig.savefig(t, dpi=100)
+    fig.savefig(t, dpi=300)
