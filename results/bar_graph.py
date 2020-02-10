@@ -95,6 +95,18 @@ from util import extract_test_results, recursive_extract, summary, directory_pre
 
 mapping = {
     "16" : {
+        "x_axis":[
+            "Number of hops",
+            "Number of hops"
+        ],
+        "y_axis":[
+            "Packets seen",
+            "Sequence numbers seen (%)",
+        ],
+        "title": [
+            "Packet Count vs. Number of Hops",
+            "Packet Reception vs. Number of Hops"
+        ],
         "order_map":{
             "test1":0,
             "test2":1,
@@ -109,10 +121,10 @@ mapping = {
             "test11":10,
         },
         "label_map" : {
-            "test1":"0 Hops\n",
-            "test2":"0-1 Hops\n",
-            "test3":"1-2 Hops\n",
-            "test4":"2 Hops\n",
+            "test1":"0",
+            "test2":"0-1",
+            "test3":"1-2",
+            "test4":"2",
         },
         "device_name_map" : {
             "transmitter":"Transmitter",
@@ -128,6 +140,18 @@ mapping = {
         'sort_list' : ["Transmitter", "Observer 1", "Observer 2", "Observer 3", "Observer 4"]
     },
     "17" : {
+        "x_axis":[
+            "",
+            ""
+        ],
+        "y_axis":[
+            "Packets seen",
+            "Sequence numbers seen (%)",
+        ],
+        "title": [
+            "Effect of Increasing Node Density on Frame Count",
+            "Effect of Increasing Node Density on Packet Reception"
+        ],
         "order_map":{
             "test1":0,
             "test2":1,
@@ -158,6 +182,18 @@ mapping = {
         "color_map": ["#1f77b4", '#9467bd',"#ff7f0e",'#2ca02c', '#d62728', '#8c564b', '#e377c2', '#7f7f7f']
     },
     "18" : {
+        "x_axis":[
+            "",
+            ""
+        ],
+        "y_axis":[
+            "Packets seen",
+            "Sequence numbers seen (%)",
+        ],
+        "title": [
+            "Effect of Increasing TTL on Frame Count",
+            "Effect of Increasing TTL on Packet Reception"
+        ],
         "order_map":{
             "test1":0,
             "test2":1,
@@ -236,21 +272,33 @@ print (reliability_data)
 
 title = "configuration-"+str(cfg)+"-bar-graph"
 
-data_frames = [{"alt_title":"packet-count","title":"Packet Count", "df": pd.DataFrame(packet_count_data, index=labels)}, {"alt_title":"reliability","title":"% of sequence numbers seen", "df": pd.DataFrame(reliability_data, index=labels)}]
+data_frames = [{"alt_title":"packet-count", "df": pd.DataFrame(packet_count_data, index=labels)}, {"alt_title":"reliability", "df": pd.DataFrame(reliability_data, index=labels)}]
 
-for df in data_frames:
+for idx, df in enumerate(data_frames):
 
     df["df"] = df["df"][current_map["sort_list"]]
     t = title + "-" + df["alt_title"]
 
     spacing = [i for i in range(0,105,5)]
+    apply_spacing = False
+
+    if df["alt_title"] != "packet-count":
+        apply_spacing = True
 
     if "color_map" in current_map.keys():
-        plt = df["df"].plot.bar(title = df["title"], rot=0, color=current_map["color_map"], yticks=(spacing)) #, legend=False , yticks=(spacing)
+        if apply_spacing:
+            plt = df["df"].plot.bar(title = current_map["title"][idx], rot=0, color=current_map["color_map"], yticks=(spacing)) #, legend=False , yticks=(spacing)
+        else:
+            plt = df["df"].plot.bar(title = current_map["title"][idx], rot=0, color=current_map["color_map"]) #, legend=False , yticks=(spacing)
     else:
-        plt = df["df"].plot.bar(title = df["title"], rot=0, yticks=(spacing)) #, legend=False , yticks=(spacing)
+        if apply_spacing:
+            plt = df["df"].plot.bar(title = current_map["title"][idx], rot=0, yticks=(spacing)) #, legend=False , yticks=(spacing)
+        else:
+            plt = df["df"].plot.bar(title = current_map["title"][idx], rot=0) #, legend=False , yticks=(spacing)
 
-    plt.legend(loc='lower right')
+    plt.set_xlabel(current_map["x_axis"][idx])
+    plt.set_ylabel(current_map["y_axis"][idx])
+
+    plt.legend(bbox_to_anchor=(1.04,0), loc="lower left", borderaxespad=0)
     fig = plt.get_figure()
-    # fig.set_figheight(8)
-    fig.savefig(t, dpi=300)
+    fig.savefig(t, dpi=300, bbox_inches = "tight")
