@@ -2,7 +2,7 @@ import pandas as pd
 
 
 out_file = "energy-consumption-days"
-title = "Device lifetime for different scenarios"
+title = "Expected Device Lifetime on 2250mAh Battery Pack"
 x_axis = "Scenario"
 y_axis = "Lifetime (days) "
 labels = ["Riptide (active)", "RipTide (idle)", "BLE (active)", "BLE (idle)"]
