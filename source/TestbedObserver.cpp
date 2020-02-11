@@ -112,7 +112,7 @@ void pre_allocate_tdma()
 int main()
 {
     uBit.init();
-    pre_allocate_tdma();
+    // pre_allocate_tdma();
     uBit.radio.setTestRole(Observer);
     memset(reliabilityResults, 0, TESTBED_MAX_SEQUENCE);
     uBit.radio.enable();
@@ -124,13 +124,21 @@ int main()
     uBit.display.print((int)serial_number);
     uBit.sleep(500);
 
+#if TEST_DISABLE_DISPLAY == 1
+    uBit.display.disable();
+#endif
+
     while(1)
     {
+#if TEST_DISABLE_DISPLAY == 0
         uBit.display.print('O');
+#endif
         uBit.sleep(500);
         // dump_tdma_table(1);
         // uBit.serial.printf("tx %d fwd %d rx %d crce: %d ", packets_transmitted, packets_forwarded, packets_received,crc_fail_count);
+#if TEST_DISABLE_DISPLAY == 0
         uBit.display.print(' ');
+#endif
         uBit.sleep(500);
     }
 }

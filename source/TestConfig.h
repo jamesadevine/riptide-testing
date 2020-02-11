@@ -10,6 +10,8 @@
 
 #define CURRENT_TEST_CONFIG         TEST_CONFIG_TESTBED_OBSERVER
 
+#define TEST_DISABLE_DISPLAY                1
+
 #define TEST_SOURCE_COUNT                   1
 #define TEST_PACKET_COUNT                   1000
 

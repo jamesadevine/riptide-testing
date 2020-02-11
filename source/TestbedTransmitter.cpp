@@ -89,7 +89,7 @@ void pre_allocate_tdma()
 int main()
 {
     uBit.init();
-    pre_allocate_tdma();
+    // pre_allocate_tdma();
     uBit.radio.setTestRole(Transmitter);
     uBit.radio.enable();
     test_gpio_init();
@@ -97,9 +97,15 @@ int main()
     uBit.display.print((int)serial_number);
     uBit.sleep(500);
 
+#if TEST_DISABLE_DISPLAY == 1
+    uBit.display.disable();
+#endif
+
     while(1)
     {
+#if TEST_DISABLE_DISPLAY == 0
         uBit.display.print('T');
+#endif
         while (1)
         {
             if (uBit.buttonB.isPressed())
@@ -111,10 +117,14 @@ int main()
 
         for (int i = 0; i < 1000; i++)
         {
+#if TEST_DISABLE_DISPLAY == 0
             uBit.display.print('.');
+#endif
             wait_ms(10);
             while(uBit.radio.send((uint8_t*)&i, 4) != MICROBIT_OK);
+#if TEST_DISABLE_DISPLAY == 0
             uBit.display.print(' ');
+#endif
             wait_ms(10);
         }
     }
