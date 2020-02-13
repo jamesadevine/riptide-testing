@@ -172,7 +172,7 @@ current_map = mapping[str(cfg)]
 
 labels = []
 
-for i in range(1,len(current_map["order_map"].keys())):
+for i in range(1,len(current_map["order_map"].keys()) + 1):
     # print(cfg)
     extract_test_results(cfg, i)
     # print(summary)
