@@ -104,6 +104,10 @@ mapping = {
             "bottom-left":"Bottom Left",
             "top-right":'Top Right'
         },
+        "filter":[
+            ["Transmitter"],
+            []
+        ],
         'sort_list' : ["Transmitter", "Transmitter Observer", "Top Left", "Top Middle", "Top Right", "Bottom Left", "Bottom Middle", "Bottom Right"],
         "label_map" : {
             "test1":"(.1, .1)",
@@ -146,17 +150,17 @@ mapping = {
         },
         "sort_list" : [ "Observer" ],
         "label_map" : {
-            "test1":"0\n",
-            "test2":"1\n",
-            "test3":"2\n",
-            "test4":"3\n",
-            "test5":"4\n",
-            "test6":"5\n",
-            "test7":"6\n",
-            "test8":"7\n",
-            "test9":"8\n",
-            "test10":"9\n",
-            "test11":"10\n",
+            "test1":"0",
+            "test2":"1",
+            "test3":"2",
+            "test4":"3",
+            "test5":"4",
+            "test6":"5",
+            "test7":"6",
+            "test8":"7",
+            "test9":"8",
+            "test10":"9",
+            "test11":"10",
         }
     }
 }
@@ -212,12 +216,25 @@ for idx, df in enumerate(data_frames):
     # sort
     df["df"] = df["df"][current_map["sort_list"]]
 
+    if "filter" in current_map.keys():
+
+        if idx > len(current_map["filter"]):
+            print("Not enough filters specified in map")
+            exit(-1)
+
+        current_filter = current_map["filter"][idx]
+
+        if len(current_filter):
+            for filt in current_filter:
+                del df["df"][filt]
+
     spacing = [i for i in range(0,105,5)]
 
     plt = df["df"].plot.line(title = current_map["title"][idx], rot=0, yticks=(spacing)) #, legend=False
 
     plt.set_ylabel(current_map["y_axis"][idx])
     plt.set_xlabel(current_map["x_axis"][idx])
-    plt.legend(bbox_to_anchor=(1.04,0), loc="lower left", borderaxespad=0)
+    plt.legend(loc='upper center', bbox_to_anchor=(0.5, -0.13), ncol=2)
+    #plt.legend(bbox_to_anchor=(1.04,0), loc="lower left", borderaxespad=0)
     fig = plt.get_figure()
     fig.savefig(t, dpi=300, bbox_inches = "tight")
