@@ -97,7 +97,7 @@ mapping = {
     "16" : {
         "x_axis":[
             "Number of hops",
-            "Number of hops"
+            "Maximum number of hops"
         ],
         "y_axis":[
             "Packets seen",
@@ -122,22 +122,22 @@ mapping = {
         },
         "label_map" : {
             "test1":"0",
-            "test2":"0-1",
-            "test3":"1-2",
+            "test2":"~1",
+            "test3":"~2",
             "test4":"2",
         },
         "device_name_map" : {
             "transmitter":"Transmitter",
-            "observer[1]":"Observer 1",
-            "observer[2]":"Observer 2",
-            "observer[3]":"Observer 3",
-            "observer[5]":"Observer 4",
-            "observer[6]":"Observer 5",
-            "observer[7]":"Observer 6",
-            "observer[8]":"Observer 7",
+            "observer[1]":"Device 1",
+            "observer[2]":"Device 2",
+            "observer[3]":"Device 3",
+            "observer[5]":"Device 4",
+            "observer[6]":"Device 5",
+            "observer[7]":"Device 6",
+            "observer[8]":"Device 7",
         },
         "color_map":["#1f77b4","#ff7f0e",'#2ca02c', '#d62728', '#7f7f7f'],
-        'sort_list' : ["Transmitter", "Observer 1", "Observer 2", "Observer 3", "Observer 4"]
+        'sort_list' : ["Transmitter", "Device 1", "Device 2", "Device 3", "Device 4"]
     },
     "17" : {
         "x_axis":[
@@ -170,15 +170,15 @@ mapping = {
         },
         "device_name_map" : {
             "transmitter":"Transmitter",
-            "observer[1]":"Observer 1",
-            "observer[2]":"Observer 2",
-            "observer[3]":"Observer 3",
-            "observer[5]":"Observer 4",
-            "observer[6]":"Observer 5",
-            "observer[7]":"Observer 6",
-            "observer[8]":"Observer 7",
+            "observer[1]":"Device 1",
+            "observer[2]":"Device 2",
+            "observer[3]":"Device 3",
+            "observer[5]":"Device 4",
+            "observer[6]":"Device 5",
+            "observer[7]":"Device 6",
+            "observer[8]":"Device 7",
         },
-        "sort_list" : ["Transmitter", "Observer 5", "Observer 1", "Observer 2", "Observer 3", "Observer 6", "Observer 7", "Observer 4"],
+        "sort_list" : ["Transmitter", "Device 5", "Device 1", "Device 2", "Device 3", "Device 6", "Device 7", "Device 4"],
         "color_map": ["#1f77b4", '#9467bd',"#ff7f0e",'#2ca02c', '#d62728', '#8c564b', '#e377c2', '#7f7f7f']
     },
     "18" : {
@@ -212,16 +212,16 @@ mapping = {
         },
         "device_name_map" : {
             "transmitter":"Transmitter",
-            "observer[1]":"Observer 1",
-            "observer[2]":"Observer 2",
-            "observer[3]":"Observer 3",
-            "observer[5]":"Observer 4",
-            "observer[6]":"Observer 5",
-            "observer[7]":"Observer 6",
-            "observer[8]":"Observer 7",
+            "observer[1]":"Device 1",
+            "observer[2]":"Device 2",
+            "observer[3]":"Device 3",
+            "observer[5]":"Device 4",
+            "observer[6]":"Device 5",
+            "observer[7]":"Device 6",
+            "observer[8]":"Device 7",
         },
         "color_map":["#1f77b4","#ff7f0e",'#2ca02c', '#d62728', '#7f7f7f'],
-        'sort_list' : ["Transmitter", "Observer 1", "Observer 2", "Observer 3", "Observer 4"]
+        'sort_list' : ["Transmitter", "Device 1", "Device 2", "Device 3", "Device 4"]
     }
 }
 
