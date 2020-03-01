@@ -95,6 +95,7 @@ from util import extract_test_results, recursive_extract, summary, directory_pre
 
 mapping = {
     "16" : {
+        "legend_align":"right",
         "x_axis":[
             "Number of hops",
             "Maximum number of hops"
@@ -140,6 +141,7 @@ mapping = {
         'sort_list' : ["Transmitter", "Device 1", "Device 2", "Device 3", "Device 4"]
     },
     "17" : {
+        "legend_align":"bottom",
         "x_axis":[
             "",
             ""
@@ -182,6 +184,7 @@ mapping = {
         "color_map": ["#1f77b4", '#9467bd',"#ff7f0e",'#2ca02c', '#d62728', '#8c564b', '#e377c2', '#7f7f7f']
     },
     "18" : {
+        "legend_align":"bottom",
         "x_axis":[
             "",
             ""
@@ -299,6 +302,9 @@ for idx, df in enumerate(data_frames):
     plt.set_xlabel(current_map["x_axis"][idx])
     plt.set_ylabel(current_map["y_axis"][idx])
 
-    plt.legend(bbox_to_anchor=(1.04,0), loc="lower left", borderaxespad=0)
+    if current_map["legend_align"] == "bottom":
+        plt.legend(loc='upper center', bbox_to_anchor=(0.5, -0.13), ncol=2)
+    else:
+        plt.legend(bbox_to_anchor=(1.04,0), loc="lower left", borderaxespad=0)
     fig = plt.get_figure()
     fig.savefig(t, dpi=300, bbox_inches = "tight")
