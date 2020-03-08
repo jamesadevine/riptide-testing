@@ -5,7 +5,7 @@ out_file = "energy-consumption-days"
 title = "Expected Device Lifetime on a 2000mAh Battery Pack"
 x_axis = "Scenario"
 y_axis = "Lifetime (days) "
-labels = ["Riptide (active)", "RipTide (idle)", "BLE (active)", "BLE (idle)"]
+labels = ["Splash (active)", "Splash (idle)", "BLE (active)", "BLE (idle)"]
 
 results = {
     "RipTide (idle)":[16.43],

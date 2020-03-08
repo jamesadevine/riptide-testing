@@ -5,7 +5,7 @@ out_file = "energy-comparison-protocols"
 title = "Expected Device Lifetime on a 2000mAh Battery Pack"
 x_axis = "Protocol"
 y_axis = "Lifetime (days) "
-labels = ["Glossy", "Whisper", "RipTide"]
+labels = ["Glossy", "Whisper", "Splash"]
 
 results = {
     "Glossy":[1243],

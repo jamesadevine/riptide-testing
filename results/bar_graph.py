@@ -125,7 +125,7 @@ mapping = {
             "test1":"0",
             "test2":"~1",
             "test3":"~2",
-            "test4":"2",
+            "test4":"~3",
         },
         "device_name_map" : {
             "transmitter":"Transmitter",
@@ -143,8 +143,8 @@ mapping = {
     "17" : {
         "legend_align":"bottom",
         "x_axis":[
-            "",
-            ""
+            "Devices",
+            "Devices"
         ],
         "y_axis":[
             "Packets seen",
@@ -186,8 +186,8 @@ mapping = {
     "18" : {
         "legend_align":"bottom",
         "x_axis":[
-            "",
-            ""
+            "Devices",
+            "Devices"
         ],
         "y_axis":[
             "Packets seen",
