@@ -53,6 +53,8 @@ def extract_data_new(path, extract_raw = False):
 
 def extract_data(path, extract_raw = False):
     device_name = path.split("/")[-1].replace("-clean.txt","")
+
+    print(path)
     with open(path,"r+") as f:
         lines = f.readlines()
 
@@ -104,8 +106,8 @@ def combine_data_dicts(dicts):
                 combined[k] = d[k]
             else:
                 for k2 in d[k]:
-                    print(combined[k][k2])
-                    print(d[k][k2])
+                    # print(combined[k][k2])
+                    # print(d[k][k2])
                     if type(combined[k][k2]) == list:
                         combined[k][k2] = [(x + y) / 2.0 for x, y in zip(combined[k][k2], d[k][k2])]
                     else:
@@ -123,7 +125,6 @@ def recursive_extract(path, extract_raw = False, use_new = False):
             merge_array += [recursive_extract(fp, extract_raw=extract_raw, use_new=use_new)]
 
     out = combine_data_dicts(merge_array)
-
     data_files = glob.glob(path + "/*-clean.txt")
 
     if data_files == []:
