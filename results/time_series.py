@@ -162,6 +162,50 @@ mapping = {
             "test10":"9",
             "test11":"10",
         }
+    },
+    "19":{
+        "x_axis":[
+            "Introduced error (cycles)",
+            "Introduced error (cycles)"
+        ],
+        "y_axis":[
+            "Sequence numbers seen (%)",
+            "Sequence numbers seen (%)",
+        ],
+        "title": [
+            "Packet Reception vs. Introduced Error (Initial Transmission)",
+            "Packet Reception vs. Introduced Error (Repetition)",
+        ],
+        "order_map" : {
+            "test1":0,
+            "test2":1,
+            "test3":2,
+            "test4":3,
+            "test5":4,
+            "test6":5,
+            "test7":6,
+            "test8":7,
+            "test9":8,
+            "test10":9,
+            "test11":10,
+        },
+        "device_name_map":{
+            "observer":"Observer"
+        },
+        "sort_list" : [ "Observer" ],
+        "label_map" : {
+            "test1":"0",
+            "test2":"1",
+            "test3":"2",
+            "test4":"3",
+            "test5":"4",
+            "test6":"5",
+            "test7":"6",
+            "test8":"7",
+            "test9":"8",
+            "test10":"9",
+            "test11":"10",
+        }
     }
 }
 
